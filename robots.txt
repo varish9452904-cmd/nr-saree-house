@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://varish9452904-cmd.github.io/nr-saree-house/sitemap.xml
