@@ -1272,7 +1272,7 @@ background:#111;
 /* Fade Animation */
 
 .fade-up{
-opacity:0;
+opacity:1;
 transform:translateY(40px);
 animation:fadeUp .8s ease forwards;
 }
