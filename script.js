@@ -1,285 +1,263 @@
+// ===========================
+// Scroll Animation
+// ===========================
+
 const hiddenElements = document.querySelectorAll(
-'.featured,.why-us,.about-preview,.reviews,.cta'
+    '.featured, .why-us, .about-preview, .reviews, .cta, .faq, .instagram, .newsletter'
 );
 
-const observer = new IntersectionObserver((entries)=>{
-entries.forEach(entry=>{
+const observer = new IntersectionObserver((entries) => {
 
-if(entry.isIntersecting){
-entry.target.classList.add("show");
-}
+    entries.forEach((entry) => {
 
+        if (entry.isIntersecting) {
+            entry.target.classList.add('show');
+        }
+
+    });
+
+}, {
+    threshold: 0.15
 });
-});
 
-hiddenElements.forEach((el)=>{
+hiddenElements.forEach((el) => {
 
-el.classList.add("hidden");
-
-observer.observe(el);
-
-});
-window.addEventListener("load",()=>{
-
-setTimeout(()=>{
-
-const loader = document.getElementById("loader");
-
-if(loader){
-
-window.addEventListener("load",()=>{
-
-setTimeout(()=>{
-
-loader.style.opacity="0";
-
-setTimeout(()=>{
-
-loader.style.display="none";
-
-},800);
-
-},1200);
+    el.classList.add('hidden');
+    observer.observe(el);
 
 });
 
-}
 
-setTimeout(()=>{
+// ===========================
+// Loader
+// ===========================
 
-document.getElementById("loader").style.display="none";
+window.addEventListener('load', () => {
 
-},800);
+    const loader = document.getElementById('loader');
 
-},1200);
+    if (loader) {
 
-});
-window.addEventListener("scroll",()=>{
+        setTimeout(() => {
 
-const header=document.querySelector("header");
+            loader.style.opacity = '0';
 
-if(window.scrollY>80){
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 800);
 
-header.classList.add("scrolled");
+        }, 1200);
 
-}else{
-
-header.classList.remove("scrolled");
-
-}
-
-});
-const menuToggle = document.getElementById("menuToggle");
-const nav = document.querySelector("nav");
-
-if(menuToggle){
-
-menuToggle.addEventListener("click",()=>{
-
-nav.classList.toggle("active");
+    }
 
 });
 
-}
+
+// ===========================
+// Header Scroll
+// ===========================
+
+window.addEventListener('scroll', () => {
+
+    const header = document.querySelector('header');
+
+    if (!header) return;
+
+    if (window.scrollY > 80) {
+        header.classList.add('scrolled');
+    } else {
+        header.classList.remove('scrolled');
+    }
+
+});
+
+
 // ===========================
 // Mobile Menu
 // ===========================
 
+const menuToggle = document.getElementById('menuToggle');
+const nav = document.querySelector('nav');
 
-if (menuToggle) {
-    menuToggle.addEventListener("click", function () {
-        nav.classList.toggle("active");
+if (menuToggle && nav) {
+
+    menuToggle.addEventListener('click', () => {
+        nav.classList.toggle('active');
     });
+
 }
+
+
 // ===========================
 // Product Search
 // ===========================
 
-const searchBox = document.getElementById("searchBox");
-const cards = document.querySelectorAll(".card");
+const searchBox = document.getElementById('searchBox');
+const cards = document.querySelectorAll('.card');
 
 if (searchBox) {
 
-searchBox.addEventListener("keyup", function () {
+    searchBox.addEventListener('keyup', function () {
 
-const value = this.value.toLowerCase();
+        const value = this.value.toLowerCase();
 
-cards.forEach((card) => {
+        cards.forEach((card) => {
 
-const text = card.innerText.toLowerCase();
+            const text = card.innerText.toLowerCase();
 
-if (text.includes(value)) {
+            if (text.includes(value)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
 
-card.style.display = "block";
+        });
 
-} else {
-
-card.style.display = "none";
-
-}
-
-});
-
-});
+    });
 
 }
+
+
 // ===========================
 // Category Filter
 // ===========================
 
-const categoryFilter = document.getElementById("categoryFilter");
+const categoryFilter = document.getElementById('categoryFilter');
 
 if (categoryFilter) {
 
-categoryFilter.addEventListener("change", function () {
+    categoryFilter.addEventListener('change', function () {
 
-const category = this.value;
+        const category = this.value;
 
-cards.forEach((card) => {
+        cards.forEach((card) => {
 
-if (category === "all") {
+            if (
+                category === 'all' ||
+                card.dataset.category === category
+            ) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
 
-card.style.display = "block";
+        });
 
-} else if (card.dataset.category === category) {
-
-card.style.display = "block";
-
-} else {
-
-card.style.display = "none";
-
-}
-
-});
-
-});
+    });
 
 }
+
+
 // ===========================
 // Quick View Popup
 // ===========================
 
-const quickView = document.getElementById("quickView");
-const closePopup = document.getElementById("closePopup");
+const quickView = document.getElementById('quickView');
+const closePopup = document.getElementById('closePopup');
 
-const productButtons = document.querySelectorAll(".card .hero-btn");
+const productButtons = document.querySelectorAll('.card .hero-btn');
 
-productButtons.forEach((button) => {
+if (quickView) {
 
-button.addEventListener("click", function(e){
+    productButtons.forEach((button) => {
 
-e.preventDefault();
+        button.addEventListener('click', function (e) {
 
-const card = this.closest(".card");
+            e.preventDefault();
 
-const image = card.querySelector("img").src;
-const title = card.querySelector("h3").innerText;
-const price = card.querySelector("h4").innerText;
+            const card = this.closest('.card');
 
-document.getElementById("popupImage").src = image;
-document.getElementById("popupTitle").innerText = title;
-document.getElementById("popupPrice").innerText = price;
+            if (!card) return;
 
-quickView.style.display = "flex";
+            const image = card.querySelector('img');
+            const title = card.querySelector('h3');
+            const price = card.querySelector('h4');
 
-});
+            const popupImage = document.getElementById('popupImage');
+            const popupTitle = document.getElementById('popupTitle');
+            const popupPrice = document.getElementById('popupPrice');
 
-});
+            if (popupImage && image) {
+                popupImage.src = image.src;
+            }
 
-closePopup.addEventListener("click", function(){
+            if (popupTitle && title) {
+                popupTitle.innerText = title.innerText;
+            }
 
-quickView.style.display = "none";
+            if (popupPrice && price) {
+                popupPrice.innerText = price.innerText;
+            }
 
-});
+            quickView.style.display = 'flex';
 
-window.addEventListener("click", function(e){
+        });
 
-if(e.target === quickView){
-
-quickView.style.display = "none";
+    });
 
 }
 
-});
+
+// Close popup
+
+if (closePopup && quickView) {
+
+    closePopup.addEventListener('click', () => {
+        quickView.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+
+        if (e.target === quickView) {
+            quickView.style.display = 'none';
+        }
+
+    });
+
+}
+
+
 // ===========================
 // Back To Top
 // ===========================
 
-const topBtn = document.getElementById("topBtn");
+const topBtn = document.getElementById('topBtn');
 
-window.addEventListener("scroll", function(){
+if (topBtn) {
 
-if(window.scrollY > 300){
+    window.addEventListener('scroll', () => {
 
-topBtn.style.display = "block";
+        if (window.scrollY > 300) {
+            topBtn.style.display = 'block';
+        } else {
+            topBtn.style.display = 'none';
+        }
 
-}else{
+    });
 
-topBtn.style.display = "none";
+    topBtn.addEventListener('click', () => {
+
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+
+    });
 
 }
 
-});
 
-topBtn.addEventListener("click", function(){
-
-window.scrollTo({
-
-top:0,
-
-behavior:"smooth"
-
-});
-
-});
 // ===========================
-// Mobile Menu
-// ===========================
-
-const menuToggle = document.getElementById("menu-toggle");
-
-const navLinks = document.querySelector(".nav-links");
-
-menuToggle.addEventListener("click",()=>{
-
-navLinks.classList.toggle("active");
-
-});
 // Wishlist
+// ===========================
 
-document.querySelectorAll(".wishlist").forEach((heart)=>{
+document.querySelectorAll('.wishlist').forEach((heart) => {
 
-heart.onclick=function(){
+    heart.addEventListener('click', function () {
 
-this.innerHTML=this.innerHTML=="♡"?"♥":"♡";
+        this.innerHTML =
+            this.innerHTML === '♡' ? '♥' : '♡';
 
-};
-
-});
-// Scroll Animation
-
-const observer = new IntersectionObserver((entries)=>{
-    entries.forEach((entry)=>{
-        if(entry.isIntersecting){
-            entry.target.classList.add("show");
-        }
     });
-});
 
-document.querySelectorAll("section").forEach((el)=>{
-    el.classList.add("fade-up");
-    observer.observe(el);
-});
-const observer = new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
-        if(entry.isIntersecting){
-            entry.target.classList.add("show");
-        }
-    });
-});
-
-document.querySelectorAll("section").forEach(section=>{
-    section.classList.add("fade-up");
-    observer.observe(section);
 });
